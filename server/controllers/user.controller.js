@@ -40,7 +40,7 @@ export async function registerUserController(request,response){
         const verifyEmail = await sendEmail({
             sentTo : email,
             subject : "Verify email from binkeyit",
-            html :
+            html : verifyEmailTemplate
         })
 
 
