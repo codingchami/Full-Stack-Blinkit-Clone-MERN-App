@@ -37,10 +37,22 @@ export async function registerUserController(request,response){
         const newUser = new UserModel(playload)
         const save = await newUser.save()
 
+        const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
+
         const verifyEmail = await sendEmail({
             sentTo : email,
             subject : "Verify email from binkeyit",
-            html : verifyEmailTemplate
+            html : verifyEmailTemplate({
+                name,
+                url : VerifyEmailUrl
+            })
+        })
+
+        return response.json({
+            message : "User register successfully",
+            error : false,
+            success : true,
+            data : save
         })
 
 
