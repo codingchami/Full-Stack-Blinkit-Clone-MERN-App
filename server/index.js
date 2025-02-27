@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import express from 'express'
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(morgan())
 app.use(helmet({
-    crossOriginResourcePolicy: false
+    crossOriginResourcePolicy : false
 }))
 
 const PORT = 8080 || process.env.PORT

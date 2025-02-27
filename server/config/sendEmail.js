@@ -8,23 +8,29 @@ if(!process.env.RESEND_API){
 
 const resend = new Resend(process.env.RESEND_API);
 
-const sendEmail = async({sendTo, subject, html })=>{
+const sendEmail = async ({ sentTo, subject, html }) => {
     try {
+        console.log(`Sending email to: ${sentTo}, subject: ${subject}`);
+
         const { data, error } = await resend.emails.send({
-            from: 'Binkeyit <noreply@amitprajapati.co.in>',
-            to: sendTo,
+           from: 'Binkeyit@resend.dev', // Use your verified domain
+            to: sentTo,
             subject: subject,
             html: html,
         });
 
         if (error) {
-            return console.error({ error });
+            console.error("Email sending failed:", error);
+            return null;
         }
 
-        return data
+        console.log("Email sent successfully:", data);
+        return data;
     } catch (error) {
-        console.log(error)
+        console.error("Error in sendEmail:", error);
+        return null;
     }
-}
+};
+
 
 export default sendEmail
