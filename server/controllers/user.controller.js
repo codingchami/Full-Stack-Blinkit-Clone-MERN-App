@@ -97,3 +97,47 @@ export async function verifyEmailController(request,response){
         })
     }
 }
+
+//user login controller
+ export async function loginController(request,response) {
+    try{
+        const { email , password } = request.body
+
+        const user = await UserModel.findOne({email})
+
+        if(!user){
+            return response.status(400).json({
+                message : "User not register!..",
+                error : true,
+                success : false
+            })
+        }
+
+        if(user.status !== "Active"){
+            return response.status(400).json({
+                message : "Contact to Admin",
+                error : true,
+                success : false
+            })
+        
+        }
+         const checkPassword = await bcryptjs.compare(password,user.password)
+
+         if(!checkPassword){
+            return response.status(400).json({
+                message : "Check Your Password!..",
+                error : true,
+                success : false 
+            })
+         }
+
+         
+
+    }catch(error){
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+ }
