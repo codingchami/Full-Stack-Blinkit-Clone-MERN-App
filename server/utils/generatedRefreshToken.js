@@ -1,4 +1,4 @@
-import UserModel from "../models/user.model"
+import UserModel from "../models/user.model.js"
 
 const generatedRefreshToken = async(userId) => {
     const token = await jwt.sign({ id: userId },
