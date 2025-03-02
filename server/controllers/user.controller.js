@@ -3,6 +3,8 @@ import UserModel from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import sendEmail from "../config/sendEmail.js";
+import generatedAccessToken from "../utils/generatedAccessToken.js";
+import generatedRefreshToken from "../utils/generatedRefreshToken.js";
 
 export async function registerUserController(request,response){
     try{
@@ -131,6 +133,8 @@ export async function verifyEmailController(request,response){
             })
          }
 
+         const accesstoken = await generatedAccessToken(user._id)
+         const refreshtoken = await generatedRefreshToken(user._id)
          
 
     }catch(error){
