@@ -46,7 +46,7 @@ export async function registerUserController(request,response){
             subject : "Verify email from binkeyit",
             html : verifyEmailTemplate({
                 name,
-                url : VerifyEmailUrl
+                url : "https://github.com/codingchami"
             })
         })
 
