@@ -172,3 +172,29 @@ export async function loginController(request, response) {
     }
 }
 
+//logout controller
+export async function logoutController(request, response) {
+    try {
+        const cookiesOption = {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None"
+        }
+
+        response.clearCookie("accessToken",cookiesOption)
+        response.clearCookie("refreshtoken",cookiesOption)
+
+        return response.json({
+            message: "Logout successfully",
+            error: false,
+            success: true
+        })
+
+    } catch (error) {
+        return response.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}
