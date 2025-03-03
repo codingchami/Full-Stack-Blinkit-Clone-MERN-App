@@ -1,4 +1,3 @@
-//Register new User
 import UserModel from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
@@ -6,6 +5,7 @@ import sendEmail from "../config/sendEmail.js";
 import generatedAccessToken from "../utils/generatedAccessToken.js";
 import generatedRefreshToken from "../utils/generatedRefreshToken.js";
 
+//Register new User
 export async function registerUserController(request, response) {
     try {
         const { name, email, password } = request.body;
@@ -173,28 +173,33 @@ export async function loginController(request, response) {
 }
 
 //logout controller
-export async function logoutController(request, response) {
+export async function logoutController(request,response){
     try {
+        const userid = request.userId //middleware
+
         const cookiesOption = {
-            httpOnly: true,
-            secure: true,
-            sameSite: "None"
+            httpOnly : true,
+            secure : true,
+            sameSite : "None"
         }
 
         response.clearCookie("accessToken",cookiesOption)
-        response.clearCookie("refreshtoken",cookiesOption)
+        response.clearCookie("refreshToken",cookiesOption)
 
-        return response.json({
-            message: "Logout successfully",
-            error: false,
-            success: true
+        const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
+            refresh_token : ""
         })
 
+        return response.json({
+            message : "Logout successfully",
+            error : false,
+            success : true
+        })
     } catch (error) {
         return response.status(500).json({
-            message: error.message || error,
-            error: true,
-            success: false
+            message : error.message || error,
+            error : true,
+            success : false
         })
     }
 }
