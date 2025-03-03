@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {loginController,logoutController, registerUserController,uploadAvatar, verifyEmailController} from '../controllers/user.controller.js'
 import auth from '../middleware/auth.js'
+import upload from '../middleware/multer.js'
 
 const userRouter = Router()
 
