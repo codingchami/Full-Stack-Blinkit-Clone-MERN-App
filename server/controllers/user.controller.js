@@ -4,6 +4,7 @@ import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import sendEmail from "../config/sendEmail.js";
 import generatedAccessToken from "../utils/generatedAccessToken.js";
 import generatedRefreshToken from "../utils/generatedRefreshToken.js";
+import uploadImageClodinary from "../utils/uploadimageCloudinary.js";
 
 //Register new User
 export async function registerUserController(request, response) {
@@ -209,7 +210,13 @@ export async function uploadAvatar(request,response){
     try{
         const image = request.file
 
-        console.log("image",image)
+        const upload = await uploadImageClodinary(image)
+
+        return response.json({
+            message : "Upload Profile",
+            data : upload
+        })
+       
     }catch(error){
         return response.status(500).json({
             message : error.message || error,
