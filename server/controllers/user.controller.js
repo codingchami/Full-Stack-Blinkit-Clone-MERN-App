@@ -203,3 +203,18 @@ export async function logoutController(request,response){
         })
     }
 }
+
+//upload user avatar
+export async function uploadAvatar(request,response){
+    try{
+        const image = request.file
+
+        console.log("image",image)
+    }catch(error){
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
