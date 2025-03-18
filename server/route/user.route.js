@@ -12,6 +12,7 @@ userRouter.get('/logout',auth, logoutController)
 userRouter.put('/upload-avatar',auth,upload.single('avatar'),uploadAvatar)
 
 
+
 export default userRouter  
 
 
