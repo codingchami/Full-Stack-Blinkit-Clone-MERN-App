@@ -239,28 +239,33 @@ export async  function uploadAvatar(request,response){
 
 //update user details
 export async function updateUserDetails(request,response){
-    try{
+    try {
         const userId = request.userId //auth middleware
-        const {name, eail, password} = request.body
+        const { name, email, mobile, password } = request.body 
+
+        let hashPassword = ""
 
         if(password){
             const salt = await bcryptjs.genSalt(10)
-            hashPassword = await bcryptjs.hash(password, salt)
+            hashPassword = await bcryptjs.hash(password,salt)
         }
 
-        const updateUser = await UserModel.findByIdAndUpdate(userId,{
-            ...(name && {name : name}),
-            ...(email && {email : email}),
-            ...(mobile && {mobile : mobile}),
-            ...(password && {password : hashPassword})
-        }) 
+        const updateUser = await UserModel.updateOne({ _id : userId},{
+            ...(name && { name : name }),
+            ...(email && { email : email }),
+            ...(mobile && { mobile : mobile }),
+            ...(password && { password : hashPassword })
+        })
+
         return response.json({
-            message : "User updated successfully",
-            error : false,      
-            success : true, 
+            message : "Updated successfully",
+            error : false,
+            success : true,
             data : updateUser
         })
-    }catch(error){
+
+
+    } catch (error) {
         return response.status(500).json({
             message : error.message || error,
             error : true,
