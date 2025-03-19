@@ -4,7 +4,8 @@ import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import sendEmail from "../config/sendEmail.js";
 import generatedAccessToken from "../utils/generatedAccessToken.js";
 import generatedRefreshToken from "../utils/generatedRefreshToken.js";
-import uploadImageCloudinary from '../utils/uploadImageCloudinary.js'
+import uploadImageCloudinary from '../utils/uploadImageCloudinary.js';
+
 
 //Register new User
 export async function registerUserController(request, response) {
@@ -228,6 +229,38 @@ export async  function uploadAvatar(request,response){
         })
 
     } catch (error) {
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
+
+//update user details
+export async function updateUserDetails(request,response){
+    try{
+        const userId = request.userId //auth middleware
+        const {name, eail, password} = request.body
+
+        if(password){
+            const salt = await bcryptjs.genSalt(10)
+            hashPassword = await bcryptjs.hash(password, salt)
+        }
+
+        const updateUser = await UserModel.findByIdAndUpdate(userId,{
+            ...(name && {name : name}),
+            ...(email && {email : email}),
+            ...(mobile && {mobile : mobile}),
+            ...(password && {password : hashPassword})
+        }) 
+        return response.json({
+            message : "User updated successfully",
+            error : false,      
+            success : true, 
+            data : updateUser
+        })
+    }catch(error){
         return response.status(500).json({
             message : error.message || error,
             error : true,
