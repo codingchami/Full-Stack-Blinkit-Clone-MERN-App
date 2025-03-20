@@ -5,6 +5,8 @@ import sendEmail from "../config/sendEmail.js";
 import generatedAccessToken from "../utils/generatedAccessToken.js";
 import generatedRefreshToken from "../utils/generatedRefreshToken.js";
 import uploadImageCloudinary from '../utils/uploadImageCloudinary.js';
+import generatedOtp from "../utils/generatedOtp.js";
+import forgotPasswordTemplate from "../utils/forgotPasswordTemplate.js";
 
 
 //Register new User
@@ -287,7 +289,30 @@ export async function forgotPassword(request,response){
                 success : false
             })
         }
-        
+        const otp = generatedOtp()
+        const expireTime = new Date() + 60 * 60 * 1000   //otp expire time 1 hour
+
+        const update = await UserModel.findByIdAndUpdate(user._id,{
+            forgot_password_otp : otp,
+            forgot_password_expiry : new Date(expireTime).toISOString()
+        })
+
+        await sendEmail({
+            sentTo : email,
+            subject : "Forgot password from Binkeyit",
+            html : forgotPasswordTemplate({
+                name : user.name,
+                otp : otp
+            })
+        })
+
+        return response.json({
+            message : "Check your email",
+            error : false,
+            success : true,
+            data : update
+        })
+
     }catch(error){
         return response.status(500).json({
             message : error.message || error,
@@ -296,6 +321,8 @@ export async function forgotPassword(request,response){
         })
     }
 }
+
+
 
 
 
