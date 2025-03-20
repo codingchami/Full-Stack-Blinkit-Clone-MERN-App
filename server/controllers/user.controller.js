@@ -342,7 +342,7 @@ export async function verifyForgotPasswordOtp(request,response){
             })     
         }
         
-        const currentTime = new Date()
+        const currentTime = new Date().toISOString()
         if(currentTime > user.forgot_password_expiry){
             return response.status(400).json({
                 message : "OTP expired",
@@ -363,7 +363,7 @@ export async function verifyForgotPasswordOtp(request,response){
         //otp === user.forgot_password_otp
 
         return response.json({
-            message : "OTP verified",
+            message : "OTP verified successfully",
             error : false,
             success : true
         })
@@ -379,18 +379,16 @@ export async function verifyForgotPasswordOtp(request,response){
 
 //reset password
 export async function resetPassword(request,response){
-    try{
-        const {email, newPassword, confirmPassword} = request.body
+    try {
+        const { email , newPassword, confirmPassword } = request.body 
 
         if(!email || !newPassword || !confirmPassword){
             return response.status(400).json({
-                message : "Provide required field email, newPassword, confirmPassword",
-                error : true,
-                success : false
+                message : "provide required fields email, newPassword, confirmPassword"
             })
         }
 
-        const user = await userModel.findOne({email})
+        const user = await UserModel.findOne({ email })
 
         if(!user){
             return response.status(400).json({
@@ -398,13 +396,13 @@ export async function resetPassword(request,response){
                 error : true,
                 success : false
             })
-        } 
+        }
 
         if(newPassword !== confirmPassword){
             return response.status(400).json({
-                message : "newPassword and confirmPassword not match",
+                message : "newPassword and confirmPassword must be same.",
                 error : true,
-                success : false
+                success : false,
             })
         }
 
@@ -412,17 +410,16 @@ export async function resetPassword(request,response){
         const hashPassword = await bcryptjs.hash(newPassword,salt)
 
         const update = await UserModel.findOneAndUpdate(user._id,{
-            password : hashPassword 
+            password : hashPassword
         })
 
         return response.json({
-            message : "Password reset successfully",
+            message : "Password updated successfully.",
             error : false,
-            success : true,
-            data : update
+            success : true
         })
 
-    }catch(error){
+    } catch (error) {
         return response.status(500).json({
             message : error.message || error,
             error : true,
@@ -430,6 +427,7 @@ export async function resetPassword(request,response){
         })
     }
 }
+
 
 
 
