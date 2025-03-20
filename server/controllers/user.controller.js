@@ -319,6 +319,118 @@ export async function forgotPassword(request,response){
     }
 }
 
+//verify forgot password otp
+export async function verifyForgotPasswordOtp(request,response){
+    try{
+        const {email, otp} = request.body
+       
+        if(!email || !otp){
+            return response.status(400).json({
+                message : "Provide required field email, otp",
+                error : true,
+                success : false
+            })
+        }
+
+        const user = await UserModel.findOne({email})
+
+        if(!user){
+            return response.status(400).json({
+                message : "Email not available",
+                error : true,
+                success : false
+            })     
+        }
+        
+        const currentTime = new Date()
+        if(currentTime > user.forgot_password_expiry){
+            return response.status(400).json({
+                message : "OTP expired",
+                error : true,
+                success : false
+            })
+        }
+
+        if(user.forgot_password_otp !== otp){
+            return response.status(400).json({
+                message : "Invalid OTP",
+                error : true,
+                success : false
+            })
+        }
+
+        //if otp is not expired
+        //otp === user.forgot_password_otp
+
+        return response.json({
+            message : "OTP verified",
+            error : false,
+            success : true
+        })
+        
+    }catch(error){
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
+
+//reset password
+export async function resetPassword(request,response){
+    try{
+        const {email, newPassword, confirmPassword} = request.body
+
+        if(!email || !newPassword || !confirmPassword){
+            return response.status(400).json({
+                message : "Provide required field email, newPassword, confirmPassword",
+                error : true,
+                success : false
+            })
+        }
+
+        const user = await userModel.findOne({email})
+
+        if(!user){
+            return response.status(400).json({
+                message : "Email is not available",
+                error : true,
+                success : false
+            })
+        } 
+
+        if(newPassword !== confirmPassword){
+            return response.status(400).json({
+                message : "newPassword and confirmPassword not match",
+                error : true,
+                success : false
+            })
+        }
+
+        const salt = await bcryptjs.genSalt(10)
+        const hashPassword = await bcryptjs.hash(newPassword,salt)
+
+        const update = await UserModel.findOneAndUpdate(user._id,{
+            password : hashPassword 
+        })
+
+        return response.json({
+            message : "Password reset successfully",
+            error : false,
+            success : true,
+            data : update
+        })
+
+    }catch(error){
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
+
 
 
 
