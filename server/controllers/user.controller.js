@@ -274,5 +274,28 @@ export async function updateUserDetails(request,response){
     }
 }
 
+//forgot password not login
+export async function forgotPassword(request,response){
+    try{
+        const {email} = request.body
+        const user = await UserModel.findOne({email})
+
+        if(!user){
+            return response.status(400).json({
+                message : "Email not available",
+                error : true,
+                success : false
+            })
+        }
+        
+    }catch(error){
+        return response.status(500).json({
+            message : error.message || error,
+            error : true,
+            success : false
+        })
+    }
+}
+
 
 
