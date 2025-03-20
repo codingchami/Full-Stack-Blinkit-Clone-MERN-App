@@ -298,13 +298,10 @@ export async function forgotPassword(request,response){
         })
 
         await sendEmail({
-            sentTo : email,
-            subject : "Forgot password from Binkeyit",
-            html : forgotPasswordTemplate({
-                name : user.name,
-                otp : otp
-            })
-        })
+            sentTo: email,
+            subject: "Forgot password from Binkeyit",
+            html: forgotPasswordTemplate(user.name, otp) // Pass name and otp as separate arguments
+        });
 
         return response.json({
             message : "Check your email",
