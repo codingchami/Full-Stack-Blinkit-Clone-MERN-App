@@ -1,12 +1,19 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
+import Header from './components/Header'
+import Footer from './components/Footer'
+
 
 function App() {
 
   return (
-    <main className='text-red-600 text-4xl font-bold'>
-      Vite App
-      <h1 className="text-6xl font-bold text-blue-600">Tailwind CSS is working!</h1>
-    </main>
+    <>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </>
   )
 }
 
