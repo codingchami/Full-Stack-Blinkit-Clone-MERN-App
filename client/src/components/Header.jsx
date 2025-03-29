@@ -16,7 +16,7 @@ const Header = () => {
                             alt="logo"
                             className='hidden lg:block'
                         />
-                         <img src={logo}
+                        <img src={logo}
                             width={120}
                             height={60}
                             alt="logo"
@@ -27,13 +27,15 @@ const Header = () => {
                 </div>
 
                 {/**Search */}
-                <div>
+                <div className='hidden lg:block'>
                     <Search />
                 </div>
 
                 {/**login and my cart */}
-                <div>
-                    Login and my cart
+                <div className=''>
+                    <div className='hidden lg:block'>
+                        Login and my cart
+                    </div>
                 </div>
             </div>
         </header>
