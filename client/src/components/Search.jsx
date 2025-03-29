@@ -19,15 +19,15 @@ const Search = () => {
         navigate('/search')
     }
     return (
-        <div className='w-full min-w-[300px] lg:min-w-[420px] h-12 rounded-lg border overflow-hidden flex items-center text-neutral-500 bg-slate-200'>
-            <button className='flex justify-center items-center h-full p-3'>
+        <div className='w-full min-w-[300px] lg:min-w-[420px] h-12 rounded-lg border overflow-hidden flex items-center text-neutral-500 bg-slate-50 group focus-within:border-primary-200'>
+            <button className='flex justify-center items-center h-full p-3 group-focus-within:text-primary-200'>
                 <IoSearch size={22} />
             </button>
-            <div  className= 'w-full'>
+            <div className='w-full h-full'>
                 {
                     !isSearchPage ? (
                         //not in search page
-                        <div onClick={redirectToSearchPage}>
+                        <div onClick={redirectToSearchPage} className='w-full h-full flex items-center cursor-pointer'>
                             <TypeAnimation
                                 sequence={[
                                     // Same substring at the start will only be typed out once, initially
@@ -63,9 +63,10 @@ const Search = () => {
                         </div>
                     ) : (
                         //when i was search page
-                        <div className='w-full'>
+                        <div className='w-full h-full'>
                             <input type="text" placeholder="Search for atta dal and more."
-                            className=''
+                                autoFocus
+                                className='bg-transparent w-full h-full outline-none'
                             />
                         </div>
                     )
