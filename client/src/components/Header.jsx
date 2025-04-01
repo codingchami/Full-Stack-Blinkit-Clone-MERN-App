@@ -22,7 +22,6 @@ const Header = () => {
                             height={60}
                             alt="logo"
                             className='lg:hidden'
-
                         />
                     </Link>
                 </div>
@@ -42,7 +41,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <div className='container mx-auto px-2'>
+            <div className='container mx-auto px-2 lg:hidden'>
                 <Search />
             </div>
         </header>
